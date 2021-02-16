@@ -7,8 +7,19 @@ interface MemberEntity {
   avatar_url: string;
 }
 
+interface Company {
+  company:string;
+}
+
 export const ListPage: React.FC = () => {
+  const [company, setCompany] = React.useState('Lemoncode');
   const [members, setMembers] = React.useState<MemberEntity[]>([]);
+
+const searchCompany = () => {
+  fetch(`https://api.github.com/orgs/${company}/members`)
+    .then((response) => response.json())
+    .then((json) => setMembers(json));
+}
 
   React.useEffect(() => {
     fetch(`https://api.github.com/orgs/lemoncode/members`)
@@ -18,7 +29,9 @@ export const ListPage: React.FC = () => {
 
   return (
     <>
-      <h2>Hello from List page</h2>
+      <h2>Welcome to Lemoncode</h2>
+      <input value={company} onChange={((e) => setCompany(e.target.value))}></input>
+      <button onClick={searchCompany}>Search</button>
       <table className="table">
         <thead>
           <tr>
